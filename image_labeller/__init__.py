@@ -30,6 +30,8 @@ def create_app(config_class=Config):
     db.init_app(app)
 
     # register the blueprints
+    from image_labeller.auth import bp as auth_bp
+    app.register_blueprint(auth_bp)
     from image_labeller.main import bp as main_bp
     app.register_blueprint(main_bp)
     with app.app_context():

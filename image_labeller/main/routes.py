@@ -4,7 +4,8 @@ Routes for main page of image labelling app
 import os
 import logging
 
-from flask import render_template, redirect, request, current_app
+from flask import render_template, redirect, request, current_app, url_for
+from flask_login import current_user
 
 from image_labeller import db
 from image_labeller.main import bp
@@ -14,16 +15,22 @@ from image_labeller.main.labelling_utils import (
     fill_category_table,
     get_user, get_image, save_label
 )
+
 logger = logging.getLogger(__name__)
 
 @bp.route("/")
 @bp.route("/index")
 def index():
-    fill_user_table()
-    fill_image_table_if_empty()
-    categories = current_app.config["CATEGORIES"]
-    fill_category_table(categories)
-    return render_template("index.html", title="Home")
+    if not current_user.is_authenticated:
+        return redirect(url_for("auth.not_confirmed"))
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        fill_user_table()
+        fill_image_table_if_empty()
+        categories = current_app.config["CATEGORIES"]
+        fill_category_table(categories)
+        return render_template("index.html", title="Home")
+    return "User not authenticated"
 
 
 @bp.route("/new",methods=["POST","GET"])

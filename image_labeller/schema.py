@@ -10,18 +10,32 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from image_labeller import db
 from image_labeller import login
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "user"
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True,
                         nullable=False)
-    user_name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(256), nullable=True)
+    is_admin = db.Column(db.Boolean(),default=False)
+    def __repr__(self):
+        return "<User %r>" % self.username
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
 
 
 class Image(db.Model):
     __tablename__ = "image"
     image_id = db.Column(db.Integer, primary_key=True,autoincrement=True,
                          nullable=False)
-    image_filename = db.Column(db.String(100), nullable=False)
+    image_location = db.Column(db.String(100), nullable=False)
+    # does image location point to a URL or a local file?
+    image_location_is_url = db.Column(db.Boolean, nullable=False)
 
 
 class Category(db.Model):
