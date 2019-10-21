@@ -21,6 +21,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return "<User %r>" % self.username
 
+    def get_id(self):
+        return self.user_id
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -56,3 +59,8 @@ class Label(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     image = db.relation("Image", uselist=False)
     image_id = db.Column(db.Integer, db.ForeignKey('image.image_id'))
+
+
+@login.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))

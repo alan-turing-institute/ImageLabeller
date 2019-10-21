@@ -19,15 +19,15 @@ def fill_category_table(categories):
         db.session.add(c)
     db.session.commit()
 
-
-def fill_user_table():
-    """
-    dummy for now
-    """
-    u = User(user_name="test")
-    db.session.add(u)
-    db.session.commit()
-
+#
+#def fill_user_table():
+#    """
+#    dummy for now
+#    """
+#    u = User(username="test")
+#    db.session.add(u)
+#    db.session.commit()
+#
 
 def fill_image_table_if_empty():
     """
@@ -43,18 +43,19 @@ def fill_image_table_if_empty():
                                   image_dir)
     images = os.listdir(image_fullpath)
     for filename in images:
-        image = Image(image_filename=filename)
+        image = Image(image_location=filename,
+                      image_location_is_url=False)
         db.session.add(image)
     db.session.commit()
     return True
 
 
-def get_user(user_name):
+def get_user(username):
     """
     query the user table for a user_name matching the
     current session_id.
     """
-    user_rows = User.query.filter_by(user_name=user_name).all()
+    user_rows = User.query.filter_by(username=username).all()
     if len(user_rows)==0:
         raise RuntimeError("No user found in db")
     return user_rows[-1].user_id
@@ -76,7 +77,7 @@ def get_image(user_id):
                         filter_by(image_id=image.image_id).all()
         image_is_new = len(label_rows)==0
     if image:
-        return image.image_filename, image.image_id
+        return image.image_location, image.image_id
     else:
         return None, None
 

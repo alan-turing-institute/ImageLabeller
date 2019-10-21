@@ -36,3 +36,5 @@ class Config(object):
                   "Labyrinths",
                   "Spots",
                   "None"]
+    TITLE = "Image labeller"
+    HOMEPAGE_TEXT = "Label vegetation patterns"

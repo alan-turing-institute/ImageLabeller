@@ -1,4 +1,8 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
 <html lang="en">
 <html>
 <head>
@@ -16,16 +20,18 @@
   <div id="formholder">
     <div id="labelform">
       <form method="POST" action="" enctype="multipart/form-data">
-	<table>
-	  {% for field in form %}
-	  <tr>
-	    <td>{{ field.label }}</td><td>{{ field }}</td>
-	  </tr>
-	  {% endfor %}
-	</table>
+	      <table>
+          {{ form.hidden_tag() }}
+	        {% for field in form if field.widget.input_type != 'hidden' %}
+	        <tr>
+	          <td>{{ field.label }}</td><td>{{ field }}</td>
+	        </tr>
+	        {% endfor %}
+	      </table>
 	<p><input type=submit value="Submit"></p>
       </form>
     </div>
   </div>
 </body>
 </html>
+{% endblock %}
