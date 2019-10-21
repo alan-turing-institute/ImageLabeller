@@ -8,14 +8,10 @@ from wtforms import RadioField, StringField, validators
 
 class LabelForm(FlaskForm):
     """
-    Standard WTForm
+    Assign a category, and optionally notes, to an image.
+    The choices for the RadioField will be set in routes.py, according
+    to the current_app's config.
     """
-#    categories = []
-#    def set_categories(cls, categories):
-#        categories = categories
-  #  categories = ["Gaps","Labrynths","Spots","Other"]
-#    cat_radio = RadioField(choices=[(cat,cat) for cat in categories],
- #                          label="Label")
     cat_radio = RadioField(label="Label")
 
     notes = StringField('Notes:', [validators.optional(),

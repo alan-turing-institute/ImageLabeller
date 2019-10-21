@@ -26,12 +26,12 @@ def index():
         return redirect(url_for("auth.not_confirmed"))
     if current_user.is_authenticated:
         user_id = current_user.user_id
-#        fill_user_table()
         fill_image_table_if_empty()
         categories = current_app.config["CATEGORIES"]
         fill_category_table(categories)
         title = current_app.config["TITLE"]
         homepage_text = current_app.config["HOMEPAGE_TEXT"]
+        print("HERE I AM!")
         return render_template("index.html", title=title,
                                homepage_text=homepage_text)
     return "User not authenticated"
@@ -42,8 +42,7 @@ def new_image():
     """
     Display an image, and ask the user to label it
     """
-    username = "test"
-    user_id = get_user(username)
+    user_id = current_user.user_id
     image_filename, image_id = get_image(user_id)
     image_dir = current_app.config["IMAGE_DIR"]
     image_path = os.path.join(image_dir,image_filename)

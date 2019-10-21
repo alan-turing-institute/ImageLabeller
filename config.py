@@ -38,3 +38,4 @@ class Config(object):
                   "None"]
     TITLE = "Image labeller"
     HOMEPAGE_TEXT = "Label vegetation patterns"
+    TMPDIR = "/tmp/"

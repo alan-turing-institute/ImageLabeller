@@ -23,7 +23,6 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     app.config["APP_VERSION"] = __version__
-    print("Categories are {}".format(app.config["CATEGORIES"]))
 
     login.init_app(app)
     bootstrap.init_app(app)
@@ -34,6 +33,9 @@ def create_app(config_class=Config):
     app.register_blueprint(auth_bp)
     from image_labeller.main import bp as main_bp
     app.register_blueprint(main_bp)
+    from image_labeller.admin import bp as admin_bp
+    app.register_blueprint(admin_bp)
+    # create database tables
     with app.app_context():
         db.create_all()
     return app
