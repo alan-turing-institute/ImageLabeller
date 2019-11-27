@@ -1,0 +1,32 @@
+version: '3'
+services:
+  frontend:
+## uncomment the following lines, and comment the "image" line, to use local build context (useful for development)
+    build:
+      context: .
+      dockerfile: Dockerfile
+## use following line to pull pre-built image from dockerhub (need to do it this way for deploying to Azure web app
+#    image: "nbarlow/ds4sd_image_labeller:latest"
+    ports:
+     - "80:5000"
+    environment:
+     - ILDBURI=postgres  # when deploying locally, can use custom container name
+    depends_on:
+     - postgres
+    networks:
+     - db_nw
+  postgres:
+    image: "postgres:latest"
+    container_name: "postgres" # this seems to be ignored when deploying to Azure web app.
+    environment:
+      - IL_DB_USER=il
+      - IL_DB_PASSWORD=il
+      - IL_DB_USER=img-labeller
+    ports:
+     - 5432:5432
+    networks:
+     - db_nw
+
+networks:
+  db_nw:
+    driver: bridge
