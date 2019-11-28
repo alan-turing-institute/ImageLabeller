@@ -27,11 +27,11 @@ class Config(object):
             dbstring = DBTYPE
         SQLALCHEMY_DATABASE_URI = "{dbstring}://{username}:{password}@{host}:{port}/{database}".format(
             dbstring = dbstring,
-            username=os.environ.get("IL_DB_USER"),
-            password=os.environ.get("IL_DB_PASSWORD"),
-            host=os.environ.get("IL_DB_HOST"),
-            port=os.environ.get("IL_DB_PORT"),
-            database=os.environ.get("IL_DB_DATABASE"),
+            username=os.environ.get("DB_USER"),
+            password=os.environ.get("DB_PASSWORD"),
+            host=os.environ.get("DB_HOST"),
+            port=os.environ.get("DB_PORT"),
+            database=os.environ.get("DB_DATABASE"),
         )
 
 

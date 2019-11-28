@@ -10,7 +10,12 @@ services:
     ports:
      - "80:5000"
     environment:
-     - ILDBURI=postgres  # when deploying locally, can use custom container name
+     - DB_TYPE=postgres  # when deploying locally, can use custom container name
+     - DB_USER=il
+     - DB_PASSWORD=il
+     - DB_DATABASE=img-labeller
+     - DB_HOST=postgres
+     - DB_PORT=5432
     depends_on:
      - postgres
     networks:
@@ -19,9 +24,9 @@ services:
     image: "postgres:latest"
     container_name: "postgres" # this seems to be ignored when deploying to Azure web app.
     environment:
-      - IL_DB_USER=il
-      - IL_DB_PASSWORD=il
-      - IL_DB_USER=img-labeller
+      - POSTGRES_USER=il
+      - POSTGRES_PASSWORD=il
+      - POSTGRES_DB=img-labeller
     ports:
      - 5432:5432
     networks:

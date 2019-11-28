@@ -27,11 +27,11 @@ RUN pip3 install psycopg2-binary
 #### environment variables for database
 
 ENV DB_TYPE postgres
-ENV IL_DB_USER postgres
-ENV IL_DB_PASSWORD il
-ENV IL_DB_DATABASE img-labeller
-ENV IL_DB_HOST postgres
-ENV IL_DB_PORT 5432
+ENV DB_USER postgres
+ENV DB_PASSWORD il
+ENV DB_DATABASE img-labeller
+ENV DB_HOST postgres
+ENV DB_PORT 5432
 
 
 #### run the flask app
