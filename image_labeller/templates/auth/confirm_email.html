@@ -1,0 +1,8 @@
+<p>Dear {{ user.username }},
+<p>Welcome to ImageLabeller!</p>
+<p>Please confirm your email by <a href="{{ url_for('auth.confirm_email', token=token, _external=True) }}">clicking here</a>.
+</p>
+<p>Alternatively, you can paste the following link in your browser's address bar:</p>
+<p>{{ url_for('auth.confirm_email', token=token, _external=True) }}</p>
+<p>Best wishes,</p>
+<p>The ImageLabeller Team</p>

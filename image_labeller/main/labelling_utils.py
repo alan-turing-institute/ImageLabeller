@@ -19,15 +19,7 @@ def fill_category_table(categories):
         db.session.add(c)
     db.session.commit()
 
-#
-#def fill_user_table():
-#    """
-#    dummy for now
-#    """
-#    u = User(username="test")
-#    db.session.add(u)
-#    db.session.commit()
-#
+
 
 def fill_image_table_if_empty():
     """
