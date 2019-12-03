@@ -39,6 +39,9 @@ class Image(db.Model):
     image_location = db.Column(db.String(100), nullable=False)
     # does image location point to a URL or a local file?
     image_location_is_url = db.Column(db.Boolean, nullable=False)
+    image_longitude = db.Column(db.Float, nullable=True)
+    image_latitude = db.Column(db.Float, nullable=True)
+    image_time = db.column(db.DateTime, nullable=True)
 
 
 class Category(db.Model):
