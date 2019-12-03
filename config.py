@@ -12,20 +12,28 @@ class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY") or "you-will-never-guess"
 
     DB_TYPE = os.environ.get("DB_TYPE") or "sqlite3"
-    if DB_TYPE == "mysql":
-        SQLALCHEMY_DATABASE_URI = "mysql+pymysql://{username}:{password}@{host}:{port}/{database}".format(
-            username=os.environ.get("IL_MYSQL_USER"),
-            password=os.environ.get("IL_MYSQL_PASSWORD"),
-            host=os.environ.get("IL_MYSQL_HOST"),
-            port=os.environ.get("IL_MYSQL_PORT"),
-            database=os.environ.get("IL_MYSQL_DATABASE"),
-        )
-    else:
+    if DB_TYPE == "sqlite3":
         SQLALCHEMY_DATABASE_URI = "sqlite:///{filepath}".format(
             filepath=os.path.join(
                 BASEDIR, os.environ.get("SQL3_FILENAME") or "app.db"
             )
         )
+    else:
+        if DB_TYPE == "mysql":
+            dbstring =  "mysql+pymysql"
+        elif DB_TYPE == "postgres":
+            dbstring = "postgres+psycopg2"
+        else:
+            dbstring = DBTYPE
+        SQLALCHEMY_DATABASE_URI = "{dbstring}://{username}:{password}@{host}:{port}/{database}".format(
+            dbstring = dbstring,
+            username=os.environ.get("DB_USER"),
+            password=os.environ.get("DB_PASSWORD"),
+            host=os.environ.get("DB_HOST"),
+            port=os.environ.get("DB_PORT"),
+            database=os.environ.get("DB_DATABASE"),
+        )
+
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
