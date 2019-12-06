@@ -4,6 +4,7 @@ Useful functions for the admin panel of ImageLabeller
 
 import os
 import json
+from image_labeller import db
 from image_labeller.schema import Label, User, Image, Category
 
 
@@ -64,3 +65,45 @@ def prep_json(filename, tmpdir):
     with open(tmp_filename,"w") as outfile:
         json.dump(results, outfile)
     return filename
+
+
+
+def upload_image(image_dict):
+    """
+    Upload a single image to the database
+    """
+    if (not "image_location" in image_dict.keys()) or \
+       (not "image_location_is_url" in image_dict.keys()):
+        raise RuntimError("Need to specify image_location and image_location_is_url")
+    img = Image()
+    img.image_location = image_dict["image_location"]
+    img.image_location_is_url = image_dict["image_location_is_url"]
+    for k in ["image_longitude","image_latitude","image_time"]:
+        if k in image_dict.keys():
+            img.__setattr__(k, image_dict[k])
+    db.session.add(img)
+    db.session.commit()
+
+
+
+def upload_images_from_catalogue(catalogue_file):
+    """
+    Upload a set of images to the database - given a json file containing
+    [{image_location:<loc>,image_location_is_url}, ...]
+    """
+    image_catalogue = json.load(open(catalogue_file))
+
+    if (not isinstance(image_catalogue, list)) or \
+       (not isinstance(image_catalogue[0], dict)):
+        raise RuntimeError("upload_images needs to be given a list of dictionaries")
+    for image_dict in image_catalogue:
+        upload_image(image_dict)
+
+
+def allowed_file(filename):
+    """
+    Check an uploaded filename is of an allowed type.
+    """
+    allowed_extensions = {'json', 'zip', 'png'}
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in allowed_extensions
