@@ -38,6 +38,7 @@ def create_app(config_class=Config):
     # create database tables
     with app.app_context():
         db.create_all()
+
     return app
 
 from image_labeller import schema

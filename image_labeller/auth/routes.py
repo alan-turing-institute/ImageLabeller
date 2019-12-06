@@ -17,6 +17,8 @@ from image_labeller import db
 from image_labeller.auth import bp
 from image_labeller.schema import User
 from image_labeller.auth.forms import LoginForm, RegistrationForm
+from image_labeller.auth.auth_utils import fill_admin_user_if_empty
+
 
 def auto_logout():
     # Automatically logout after a period of inactivity
@@ -28,6 +30,7 @@ def auto_logout():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
+    fill_admin_user_if_empty()
     form = LoginForm()
     if form.validate_on_submit():
         # log the user in if exists

@@ -11,8 +11,6 @@ from image_labeller import db
 from image_labeller.main import bp
 from image_labeller.main.forms import LabelForm
 from image_labeller.main.labelling_utils import (
-#    fill_user_table,
-    fill_image_table_if_empty,
     fill_category_table,
     get_user, get_image, save_label
 )
@@ -26,12 +24,10 @@ def index():
         return redirect(url_for("auth.not_confirmed"))
     if current_user.is_authenticated:
         user_id = current_user.user_id
-        fill_image_table_if_empty()
         categories = current_app.config["CATEGORIES"]
         fill_category_table(categories)
         title = current_app.config["TITLE"]
         homepage_text = current_app.config["HOMEPAGE_TEXT"]
-        print("HERE I AM!")
         return render_template("index.html", title=title,
                                homepage_text=homepage_text)
     return "User not authenticated"
@@ -43,9 +39,12 @@ def new_image():
     Display an image, and ask the user to label it
     """
     user_id = current_user.user_id
-    image_filename, image_id = get_image(user_id)
-    image_dir = current_app.config["IMAGE_DIR"]
-    image_path = os.path.join(image_dir,image_filename)
+    image_location, is_url, image_id = get_image(user_id)
+    if not is_url:
+        image_dir = current_app.config["IMAGE_DIR"]
+        image_path = os.path.join(image_dir,image_filename)
+    else:
+        image_path = image_location
     categories = current_app.config["CATEGORIES"]
     label_form = LabelForm()
     label_form.cat_radio.choices = [(cat,cat) for cat in categories]
