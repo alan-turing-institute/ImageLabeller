@@ -69,7 +69,7 @@ def get_image(user_id):
                         filter_by(image_id=image.image_id).all()
         image_is_new = len(label_rows)==0
     if image:
-        return image.image_location, image.image_id
+        return image.image_location, image.image_location_is_url, image.image_id
     else:
         return None, None
 
