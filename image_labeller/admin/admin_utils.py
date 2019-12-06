@@ -4,6 +4,7 @@ Useful functions for the admin panel of ImageLabeller
 
 import os
 import json
+from datetime import datetime
 from image_labeller import db
 from image_labeller.schema import Label, User, Image, Category
 
@@ -21,6 +22,12 @@ def prep_data():
         result_dict["username"] = result.user.username
         result_dict["category"] = result.category.category_name
         result_dict["notes"] = result.notes
+        if result.image.image_longitude:
+            result_dict["longitude"] = result.image_longitude
+        if result.image.image_latitude:
+            result_dict["latitude"] = result.image_latitude
+        if result.image.image_time:
+            result_dict["time"] = result.image_time
         all_results.append(result_dict)
     return all_results
 
@@ -100,10 +107,34 @@ def upload_images_from_catalogue(catalogue_file):
         upload_image(image_dict)
 
 
+def upload_images_from_archive(archive_file):
+    """
+    Unpack a zipfile or tarfile to the right directory,
+    and upload details to the database.
+    """
+    # make a directory with the current timestamp name
+    timestring = datetime.timestamp(datetime.now()).split(".")[0]
+    output_dir = os.path.join(current_app.config["IMAGE_DIR"],timestring)
+    os.makedirs(output_dir)
+    if archive_file.endswith(".zip"):
+        os.system("unzip {} -d {}".format(archive_file, output_dir))
+    elif archive_file.endswith(".tar.gz"):
+        os.system("mv {} {}; cd {}; tar -xvzf {}; cd -".format(
+            archive_file,
+            output_dir,
+            archive_file
+        ))
+    ## list the files in the directory
+    filenames = os.listdir(output_dir)
+
+
+
 def allowed_file(filename):
     """
     Check an uploaded filename is of an allowed type.
     """
-    allowed_extensions = {'json', 'zip', 'png'}
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in allowed_extensions
+    allowed_extensions = {'.json', '.zip', '.tar.gz','.png'}
+    for ext in allowed_extensions:
+        if filename.endswith(ext):
+            return True
+    return False
