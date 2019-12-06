@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+<html lang="en">
+
+<head>
+  <title>Upload images</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<div>
+  <p>
+  To upload to ImageLabeller, either provide: <br>
+  <li> A JSON file with a list of dictionaries each of which has "image_location" and "image_location_is_url" fields, and, optionally "image_longitude", "image_latitude", "image_time" fields.</li>
+  <li> A zip file containing a set of images.</li>
+  <li> A png file of an individual image.</li>
+</p>
+</div>
+  <div id="formholder">
+    <div id="form">
+      <form method="POST" action="" enctype="multipart/form-data">
+	      <table>
+          {{ form.hidden_tag() }}
+	        {% for field in form if field.widget.input_type != 'hidden' %}
+	        <tr>
+	          <td>{{ field.label }}</td><td>{{ field }}</td>
+	        </tr>
+          {{ form.csrf_token }}
+	        {% endfor %}
+	      </table>
+	      <p><input type=submit value="Save"></p>
+      </form>
+    </div>
+  </div>
+  <div id="dbupload">
+  </div>
+</body>
+</html>
+{% endblock %}
