@@ -5,9 +5,9 @@ services:
     build:
       context: .
 ## uncomment the first line to use the local Dockerfile to build the docker image (useful for development)
-#      dockerfile: Dockerfile
+      dockerfile: Dockerfile
 ## use following line to pull pre-built image from dockerhub (need to do it this way for deploying to Azure web app
-    image: "nbarlow/ds4sd_image_labeller:latest"
+#    image: "nbarlow/ds4sd_image_labeller:latest"
     ports:
      - "80:5000"
     environment:
@@ -17,6 +17,8 @@ services:
      - DB_DATABASE=img-labeller
      - DB_HOST=postgres
      - DB_PORT=5432
+     - ADMIN_USERNAME=admin
+     - ADMIN_PASSWORD=changeme
     depends_on:
      - postgres
     networks:
