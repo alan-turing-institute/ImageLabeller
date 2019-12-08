@@ -62,6 +62,8 @@ def get_image(user_id):
     image = None
     while not image_is_new:
         images = Image.query.all()
+        if len(images) == 0:
+            return None, None, None
         image_index = random.randint(0,len(images)-1)
         image = images[image_index]
         # check if this user has already seen this image
@@ -71,7 +73,7 @@ def get_image(user_id):
     if image:
         return image.image_location, image.image_location_is_url, image.image_id
     else:
-        return None, None
+        return None, None, None
 
 
 

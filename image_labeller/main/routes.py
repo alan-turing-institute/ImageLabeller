@@ -40,6 +40,8 @@ def new_image():
     """
     user_id = current_user.user_id
     image_location, is_url, image_id = get_image(user_id)
+    if not image_location:
+        return render_template("no_images.html")
     if not is_url:
         image_dir = current_app.config["IMAGE_DIR"]
         image_path = os.path.join(image_dir,image_filename)
