@@ -21,7 +21,7 @@ for filename in os.listdir(INPUT_DIR):
     if not match:
         print("Could not extract data from filename {}".format(filename))
         continue
-    latitude, longitude, date = match.groups()
+    longitude, latitude, date = match.groups()
     this_entry = {
         "image_location": url,
         "image_location_is_url": True,
