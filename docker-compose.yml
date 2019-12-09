@@ -3,11 +3,11 @@ services:
   frontend:
 ## uncomment the following lines, and comment the "image" line, to use local build context (useful for development)
     build:
-      context: .
-## uncomment the first line to use the local Dockerfile to build the docker image (useful for development)
-      dockerfile: Dockerfile
-## use following line to pull pre-built image from dockerhub (need to do it this way for deploying to Azure web app
-#    image: "nbarlow/ds4sd_image_labeller:latest"
+## EITHER uncomment the next two lines to use the local Dockerfile to build the docker image (useful for development)
+#      context: .
+#      dockerfile: Dockerfile
+## OR use following line to pull pre-built image from dockerhub (need to do it this way for deploying to Azure web app
+    image: "nbarlow/ds4sd_image_labeller:latest"
     ports:
      - "80:5000"
     environment:
