@@ -59,8 +59,9 @@ class Config(object):
 
 ###### Application-specific
 
-    IMAGE_DIR = "static/images"
-    IMAGE_FULLPATH = os.path.join(BASEDIR, IMAGE_DIR)
+    APP_DIR = "image_labeller"
+    IMAGE_PATH = "static/images"
+    IMAGE_FULLPATH = os.path.join(BASEDIR, APP_DIR, IMAGE_PATH)
 
     CATEGORIES = ["Gaps",
                   "Labyrinths",

@@ -21,27 +21,6 @@ def fill_category_table(categories):
 
 
 
-def fill_image_table_if_empty():
-    """
-    See if we already have images in the image table - if so
-    just return.  If not, loop through the IMG_DIR directory
-    and add all images.
-    """
-    if len(Image.query.all()) > 0:
-        return True
-    image_dir = current_app.config["IMAGE_DIR"]
-    image_fullpath = os.path.join(os.path.abspath(os.path.dirname(__file__)),
-                                  "..",
-                                  image_dir)
-    images = os.listdir(image_fullpath)
-    for filename in images:
-        image = Image(image_location=filename,
-                      image_location_is_url=False)
-        db.session.add(image)
-    db.session.commit()
-    return True
-
-
 def get_user(username):
     """
     query the user table for a user_name matching the

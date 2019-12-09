@@ -18,8 +18,7 @@ from image_labeller.admin import bp
 from image_labeller.admin.admin_utils import (
     prep_csv,
     prep_json,
-    upload_image,
-    upload_images_from_catalogue,
+    upload_images,
     allowed_file
 )
 from image_labeller.admin.forms import DownloadForm, UploadForm
@@ -58,15 +57,12 @@ def upload():
     """
     fileform = UploadForm()
     if request.method == "POST":
-        print("TEST!!!!",file=sys.stderr)
         if fileform.validate_on_submit():
             f = fileform.filefield.data
             filename = secure_filename(f.filename)
-            print("Got file {}".format(filename), file=sys.stderr)
             if allowed_file(filename):
                 filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
-                print("Saving output to {}".format(filepath), file=sys.stderr)
                 f.save(filepath)
-                upload_images_from_catalogue(filepath)
+                upload_images(filepath)
                 return render_template("admin/uploaded.html",filename=filename)
     return render_template("admin/upload.html",form=fileform)
