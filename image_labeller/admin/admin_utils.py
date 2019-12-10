@@ -70,7 +70,7 @@ def prep_csv(filename, tmpdir):
     for result in results:
         line = ""
         for header in headers:
-            line += result[header] + ","
+            line += str(result[header]) + ","
         line = line[:-1]
         tmp_file.write(line+"\n")
     return filename
