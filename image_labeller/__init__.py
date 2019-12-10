@@ -11,6 +11,7 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
 
 from config import Config
 
@@ -27,6 +28,11 @@ def create_app(config_class=Config):
     login.init_app(app)
     bootstrap.init_app(app)
     db.init_app(app)
+    # setup a Flask session to store data between requests
+#    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
+    sess = Session()
+    sess.init_app(app)
 
     # register the blueprints
     from image_labeller.auth import bp as auth_bp
