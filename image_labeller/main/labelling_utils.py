@@ -3,6 +3,7 @@ Most of the functions that do the useful work in labelling images
 """
 
 import os
+import sys
 import random
 from flask import current_app
 
@@ -18,7 +19,6 @@ def fill_category_table(categories):
         c = Category(category_name=cat)
         db.session.add(c)
     db.session.commit()
-
 
 
 def get_user(username):
@@ -43,13 +43,17 @@ def get_image(user_id):
         images = Image.query.all()
         if len(images) == 0:
             return None, None, None
+        print("Number of images is {}".format(len(images)),file=sys.stderr)
         image_index = random.randint(0,len(images)-1)
         image = images[image_index]
         # check if this user has already seen this image
         label_rows = Label.query.filter_by(user_id=user_id).\
                         filter_by(image_id=image.image_id).all()
         image_is_new = len(label_rows)==0
+        if not image_is_new:
+            print("Already seen image {} trying another".format(image.image_id),file=sys.stderr)
     if image:
+        print("Will display image {} {}".format(image.image_id,image.image_location),file=sys.stderr)
         return image.image_location, image.image_location_is_url, image.image_id
     else:
         return None, None, None

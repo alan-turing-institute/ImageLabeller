@@ -53,7 +53,8 @@ def download():
 @admin_required
 def upload():
     """
-    upload a catalogue containing
+    upload a catalogue containing locations of images, and optionally
+    longitudes, latitudes, and times.
     """
     fileform = UploadForm()
     if request.method == "POST":
