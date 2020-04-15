@@ -37,8 +37,31 @@ class Config(object):
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    IMAGE_DIR = "static/images"
-    IMAGE_FULLPATH = os.path.join(BASEDIR, IMAGE_DIR)
+######## use Flask-Mail to send confirmation-request or password-reset mails
+
+    MAIL_SERVER = os.environ.get("MAIL_SERVER")
+    MAIL_PORT = int(os.environ.get("MAIL_PORT") or 25)
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS") is not None
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    MAIL_ADMIN = os.environ.get("ADMIN_EMAIL")
+
+
+######### admin user added to user table when app is first started
+
+    ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
+    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD")
+
+####### storage of uploaded images or catalogues
+
+    UPLOAD_FOLDER = "/tmp/"
+
+
+###### Application-specific
+
+    APP_DIR = "image_labeller"
+    IMAGE_PATH = "static/images"
+    IMAGE_FULLPATH = os.path.join(BASEDIR, APP_DIR, IMAGE_PATH)
 
     CATEGORIES = ["Gaps",
                   "Labyrinths",

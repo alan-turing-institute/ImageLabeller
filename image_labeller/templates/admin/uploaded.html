@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+<html lang="en">
+
+<head>
+  <title>All good!</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<div>
+ Content from {{ filename }} uploaded OK!
+</div>
+  <div >
+	  <p><input type=submit value="Back"></p>
+  </div>
+</body>
+</html>
+{% endblock %}

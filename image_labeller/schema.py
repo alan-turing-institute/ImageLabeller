@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(256), nullable=True)
-    is_admin = db.Column(db.Boolean(),default=True)
+    is_admin = db.Column(db.Boolean(),default=False)
     def __repr__(self):
         return "<User %r>" % self.username
 
@@ -36,9 +36,12 @@ class Image(db.Model):
     __tablename__ = "image"
     image_id = db.Column(db.Integer, primary_key=True,autoincrement=True,
                          nullable=False)
-    image_location = db.Column(db.String(100), nullable=False)
+    image_location = db.Column(db.String(300), nullable=False)
     # does image location point to a URL or a local file?
     image_location_is_url = db.Column(db.Boolean, nullable=False)
+    image_longitude = db.Column(db.Float, nullable=True)
+    image_latitude = db.Column(db.Float, nullable=True)
+    image_time = db.Column(db.DateTime, nullable=True)
 
 
 class Category(db.Model):

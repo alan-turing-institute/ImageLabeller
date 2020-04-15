@@ -2,10 +2,11 @@ FROM ubuntu:16.04 as imlabel_base
 
 ### get pip git etc
 
-RUN apt-get update
-RUN apt-get -y install git
-RUN apt-get -y install python-pip
+
+RUN apt-get update; apt-get -y install git
+RUN apt-get update; apt-get -y install python-pip
 RUN apt-get update; apt-get -y install python3-psycopg2
+RUN apt-get update; apt-get -y install zip
 
 ####### install python packages for the frontend
 RUN apt-get install -y python3
