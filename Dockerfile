@@ -12,6 +12,7 @@ RUN apt-get update; apt-get -y install zip
 RUN apt-get install -y python3
 RUN apt-get install -y python3-pip
 RUN pip3 install --upgrade pip
+RUN pip3 install werkzeug==0.16.0
 RUN pip3 install  flask
 RUN pip3 install  flask_cors
 RUN pip3 install  flask_session
