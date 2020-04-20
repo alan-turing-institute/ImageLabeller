@@ -19,7 +19,7 @@ from datetime import datetime
 from image_labeller import db
 from image_labeller.schema import Label, User, Image, Category
 
-REGEX = "([\d]{1,3}\.[\d]+)_([\d]{1,3}\.[\d]+)_([\d]{4}-[0-1][\d]{1}-[0-3][\d]{1})"
+REGEX = "([-]?[\d]{1,3}\.[\d]+)_([-]?[\d]{1,3}\.[\d]+)_([\d]{4}-[0-1][\d]{1}-[0-3][\d]{1})"
 
 
 def prep_data():
@@ -31,7 +31,12 @@ def prep_data():
     print("We have {} results".format(len(results)))
     for result in results:
         result_dict = {}
-        result_dict["image_name"] = result.image.image_location
+        if "http" in result.image.image_location:
+            image_name = result.image.image_location
+        else:
+            image_name = os.path.basename(result.image.image_location)
+
+        result_dict["image_name"] = image_name
         result_dict["username"] = result.user.username
         result_dict["category"] = result.category.category_name
         result_dict["notes"] = result.notes
