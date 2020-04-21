@@ -2,6 +2,7 @@
 Routes for main page of image labelling app
 """
 import os
+import sys
 import logging
 
 from flask import render_template, redirect, request, current_app, url_for, session
