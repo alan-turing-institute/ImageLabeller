@@ -63,10 +63,9 @@ class Config(object):
     IMAGE_PATH = "static/images"
     IMAGE_FULLPATH = os.path.join(BASEDIR, APP_DIR, IMAGE_PATH)
 
-    CATEGORIES = ["Gaps",
-                  "Labyrinths",
-                  "Spots",
-                  "None"]
-    TITLE = "Image labeller"
-    HOMEPAGE_TEXT = "Label vegetation patterns"
+    CATEGORIES = ["Cloud",
+                  "Not cloud"]
+
+    TITLE = "Cloud labeller"
+    HOMEPAGE_TEXT = "Label images containing cloud"
     TMPDIR = "/tmp/"

@@ -4,18 +4,18 @@ services:
 ## uncomment the following lines, and comment the "image" line, to use local build context (useful for development)
 
 ## EITHER uncomment the next three lines to use the local Dockerfile to build the docker image (useful for development)
-    build:
-      context: .
-      dockerfile: Dockerfile
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
 ## OR use following line to pull pre-built image from dockerhub (need to do it this way for deploying to Azure web app
-#    image: "nbarlow/ds4sd_image_labeller:latest"
+    image: "nbarlow/ds4sd_cloud_labeller:latest"
     ports:
      - "80:5000"
     environment:
      - DB_TYPE=postgres  # when deploying locally, can use custom container name
      - DB_USER=il
      - DB_PASSWORD=il
-     - DB_DATABASE=img-labeller
+     - DB_DATABASE=cloud-labeller
      - DB_HOST=postgres
      - DB_PORT=5432
      - ADMIN_USERNAME=admin
@@ -30,7 +30,7 @@ services:
     environment:
       - POSTGRES_USER=il
       - POSTGRES_PASSWORD=il
-      - POSTGRES_DB=img-labeller
+      - POSTGRES_DB=cloud-labeller
     ports:
      - 5432:5432
     networks:
