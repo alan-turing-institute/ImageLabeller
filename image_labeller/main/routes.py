@@ -39,6 +39,8 @@ def new_image():
     """
     Display an image, and ask the user to label it
     """
+    if not current_user.is_authenticated:
+        return redirect(url_for("auth.not_confirmed"))
     user_id = current_user.user_id
 
     categories = current_app.config["CATEGORIES"]
