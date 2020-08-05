@@ -42,6 +42,10 @@ class Image(db.Model):
     image_longitude = db.Column(db.Float, nullable=True)
     image_latitude = db.Column(db.Float, nullable=True)
     image_time = db.Column(db.DateTime, nullable=True)
+    image_name = db.Column(db.String(100), nullable=True)
+    image_num = db.Column(db.Integer, nullable=True)
+    image_parent = db.Column(db.String(100), nullable=True)
+
 
 
 class Category(db.Model):

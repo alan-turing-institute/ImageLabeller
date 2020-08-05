@@ -12,10 +12,13 @@
 <body>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
   <div class="imagenum">
-  <h1> Image {{ img_id }} </h1>
+    <h1> Image {{ img_num }} </h1>
   </div>
+  <div> Longitude: {{ img_long }}, Latitude: {{img_lat}}, Date: {{img_date}} </div>
   <div id="imageholder">
-  <img src="{{ new_image }}" alt="User Image" width="250">
+    <img src="{{ new_image_rgb }}" alt="RGB Image" width="200">
+    <img src="{{ new_image_ndvi }}" alt="NDVI Image" width="200">
+    <img src="{{ new_image_bwndvi }}" alt="BWNDVI Image" width="200">
   </div>
   <div id="formholder">
     <div id="labelform">

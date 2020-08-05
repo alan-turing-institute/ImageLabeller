@@ -34,15 +34,19 @@ def get_user(username):
 
 def get_image(user_id):
     """
-    Query the image table for an image, then check that the user has not already labelled
-    this image.  (If so, pick another one)
+    Query the image table for an image, then check that the user
+    has not already labelled this image.  (If so, pick another one)
     """
     image_is_new = False
     image = None
     while not image_is_new:
-        images = Image.query.all()
+        try:
+            images = Image.query.all()
+        except:
+            print("Problem querying database - is it running?")
+            images = []
         if len(images) == 0:
-            return None, None, None
+            return {}
         print("Number of images is {}".format(len(images)),file=sys.stderr)
         image_index = random.randint(0,len(images)-1)
         image = images[image_index]
@@ -54,9 +58,20 @@ def get_image(user_id):
             print("Already seen image {} trying another".format(image.image_id),file=sys.stderr)
     if image:
         print("Will display image {} {}".format(image.image_id,image.image_location),file=sys.stderr)
-        return image.image_location, image.image_location_is_url, image.image_id
+        img_dict = {
+            "image_location": image.image_location,
+            "image_location_is_url": image.image_location_is_url,
+            "image_id": image.image_id,
+            "image_name": image.image_name,
+            "image_longitude": image.image_longitude,
+            "image_latitude": image.image_latitude,
+            "image_time": image.image_time,
+            "image_parent": image.image_parent,
+            "image_num": image.image_num
+        }
+        return img_dict
     else:
-        return None, None, None
+        return {}
 
 
 

@@ -38,6 +38,8 @@ def new_image():
     """
     Display an image, and ask the user to label it
     """
+    if not current_user.is_authenticated:
+        return redirect(url_for("auth.not_confirmed"))
     user_id = current_user.user_id
 
     categories = current_app.config["CATEGORIES"]
@@ -52,16 +54,25 @@ def new_image():
             notes = label_form.notes.data
             save_label(user_id, image_id, label, notes)
     # get the next image
-    image_location, is_url, image_id = get_image(user_id)
+    image_dict = get_image(user_id)
 
-    if not image_location:
+
+    if not image_dict:
         return render_template("no_images.html")
     # store the image id in the session
-    session["image_id"] = image_id
+    session["image_id"] = image_dict["image_id"]
     # now reset the form to re-render the page
     new_label_form = LabelForm(formdata=None)
     new_label_form.cat_radio.choices = [(cat,cat) for cat in categories]
+    rgb_loc = image_dict["image_location"]+"_RGB.png"
+    ndvi_loc = image_dict["image_location"]+"_NDVI.png"
+    bwndvi_loc = image_dict["image_location"]+"_BWNDVI.png"
     return render_template("new_image.html",
-                           new_image=image_location,
-                           img_id=image_id,
+                           new_image_rgb=rgb_loc,
+                           new_image_ndvi=ndvi_loc,
+                           new_image_bwndvi=bwndvi_loc,
+                           img_num=image_dict["image_num"],
+                           img_long=image_dict["image_longitude"],
+                           img_lat=image_dict["image_latitude"],
+                           img_date=image_dict["image_time"],
                            form=new_label_form)

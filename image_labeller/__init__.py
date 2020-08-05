@@ -3,8 +3,8 @@
 __version__ = "0.1"
 
 import os
+import time
 import logging
-
 from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from flask import Flask
@@ -42,6 +42,8 @@ def create_app(config_class=Config):
     from image_labeller.admin import bp as admin_bp
     app.register_blueprint(admin_bp)
     # create database tables
+    print("Waiting before creating DB tables")
+    time.sleep(5)
     with app.app_context():
         db.create_all()
 

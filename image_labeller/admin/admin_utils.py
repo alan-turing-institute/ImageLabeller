@@ -19,7 +19,7 @@ from datetime import datetime
 from image_labeller import db
 from image_labeller.schema import Label, User, Image, Category
 
-REGEX = "([\d]{1,3}\.[\d]+)_([\d]{1,3}\.[\d]+)_([\d]{4}-[0-1][\d]{1}-[0-3][\d]{1})"
+REGEX = "sub([\d]+)_([-]?[\d]{1,3}\.[\d]+)_([-]?[\d]{1,3}\.[\d]+)_([\d]{4}-[0-1][\d]{1}-[0-3][\d]{1})"
 
 
 def prep_data():
@@ -32,6 +32,7 @@ def prep_data():
     for result in results:
         result_dict = {}
         result_dict["image_name"] = result.image.image_location
+        result_dict["image_parent"] = result.image.image_parent
         result_dict["username"] = result.user.username
         result_dict["category"] = result.category.category_name
         result_dict["notes"] = result.notes
@@ -56,7 +57,6 @@ def prep_csv(filename, tmpdir):
     if not filename.endswith(".csv"):
         filename += ".csv"
     results = prep_data()
-#    tmpdir = os.path.join(os.getcwd(), tmpdir)
     os.makedirs(tmpdir, exist_ok=True)
     tmp_filename = os.path.join(tmpdir, filename)
     tmp_file = open(tmp_filename, "w")
@@ -82,7 +82,6 @@ def prep_json(filename, tmpdir):
     """
     if not filename.endswith(".json"):
         filename += ".json"
-#    tmpdir = os.path.join(os.getcwd(), tmpdir)
     os.makedirs(tmpdir, exist_ok=True)
     tmp_filename = os.path.join(tmpdir, filename)
     results = prep_data()
@@ -103,9 +102,15 @@ def upload_image(image_dict):
 #    print("Uploading image {}".format(image_dict["image_location"]),file=sys.stderr)
     img.image_location = image_dict["image_location"]
     img.image_location_is_url = image_dict["image_location_is_url"]
-    for k in ["image_longitude","image_latitude","image_time"]:
+    for k in ["image_longitude",
+              "image_latitude",
+              "image_time",
+              "image_parent",
+              "image_name",
+              "image_num"]:
         if k in image_dict.keys():
             img.__setattr__(k, image_dict[k])
+
     db.session.add(img)
     db.session.commit()
 
@@ -142,18 +147,23 @@ def upload_images_from_archive(archive_file):
         os.system("unzip {} -d {}".format(archive_file, upload_dir))
     ## list the files in the directory
     filenames = os.listdir(upload_dir)
-    for filename in filenames:
+    filename_bases = ["_".join(fn.split("_")[:-1]) for fn in filenames]
+    for filename_base in filename_bases:
         image_dict = {}
         image_dict["image_location"] = os.path.join(location_dir,
-                                                    filename)
+                                                    filename_base)
+        image_dict["image_parent"] = os.path.basename(archive_file)
+        image_dict["image_name"] = os.path.basename(filename_base)
         image_dict["image_location_is_url"] = False
         # see if we can extract latitude_longitude_date from the filename
-        match = re.search(REGEX, filename)
+        match = re.search(REGEX, filename_base)
         if match:
-            longitude, latitude, date = match.groups()
+            num, longitude, latitude, date = match.groups()
+            image_dict["image_num"] = int(num)
             image_dict["image_latitude"] = latitude
             image_dict["image_longitude"] = longitude
             image_dict["image_time"] = date
+
         upload_image(image_dict)
 
 
