@@ -25,7 +25,7 @@ class Config(object):
             dbstring = "postgres+psycopg2"
         else:
             dbstring = DBTYPE
-        SQLALCHEMY_DATABASE_URI = "{dbstring}://{username}:{password}@{host}:{port}/{database}".format(
+        SQLALCHEMY_DATABASE_URI = "{dbstring}://{username}:{password}@{host}:{port}/{database}?sslmode=require".format(
             dbstring = dbstring,
             username=os.environ.get("DB_USER"),
             password=os.environ.get("DB_PASSWORD"),
@@ -33,7 +33,6 @@ class Config(object):
             port=os.environ.get("DB_PORT"),
             database=os.environ.get("DB_DATABASE"),
         )
-
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
