@@ -33,7 +33,8 @@ ENV DB_PASSWORD il
 ENV DB_DATABASE img-labeller
 ENV DB_HOST postgres
 ENV DB_PORT 5432
-
+ENV ADMIN_PASSWORD=DS4SD_il
+ENV ADMIN_USERNAME=admin
 
 #### run the flask app
 
