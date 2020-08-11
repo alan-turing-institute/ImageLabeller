@@ -34,7 +34,10 @@ def prep_data():
         result_dict["image_name"] = result.image.image_location
         result_dict["image_parent"] = result.image.image_parent
         result_dict["username"] = result.user.username
-        result_dict["category"] = result.category.category_name
+        try:
+            result_dict["category"] = result.category.category_name
+        except(AttributeError):
+            result_dict["category"] = "Not sure"
         result_dict["notes"] = result.notes
         if result.image.image_longitude:
             result_dict["longitude"] = result.image.image_longitude
@@ -135,19 +138,19 @@ def upload_images_from_archive(archive_file):
     Unpack a zipfile or tarfile to the right directory,
     and upload details to the database.
     """
-    # make a directory with the current timestamp name
-    timestring = str(datetime.timestamp(datetime.now())).split(".")[0]
 
     # "upload_dir" is the absolute file path, where we will unzip files to.
-    upload_dir = os.path.join(current_app.config["IMAGE_FULLPATH"],timestring)
+    upload_dir = os.path.join(current_app.config["IMAGE_FULLPATH"],"uploads")
     os.makedirs(upload_dir)
     # location_dir is the last part of this, to be used in the URL
-    location_dir = os.path.join(current_app.config["IMAGE_PATH"],timestring)
+    location_dir = os.path.join(current_app.config["IMAGE_PATH"],"uploads")
     if archive_file.endswith(".zip"):
         os.system("unzip {} -d {}".format(archive_file, upload_dir))
     ## list the files in the directory
     filenames = os.listdir(upload_dir)
     filename_bases = ["_".join(fn.split("_")[:-1]) for fn in filenames]
+    # remove duplicates
+    filename_bases = list(set(filename_bases))
     for filename_base in filename_bases:
         image_dict = {}
         image_dict["image_location"] = os.path.join(location_dir,
