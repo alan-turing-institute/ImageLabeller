@@ -45,9 +45,14 @@ def get_image(user_id):
         except:
             print("Problem querying database - is it running?")
             images = []
+        print("Number of images is {}".format(len(images)),file=sys.stderr)
         if len(images) == 0:
             return {}
-        print("Number of images is {}".format(len(images)),file=sys.stderr)
+        # has the user labelled all images?
+        labels_done = Label.query.filter_by(user_id=user_id).all()
+        if len(labels_done) == len(images):
+            return {}
+
         image_index = random.randint(0,len(images)-1)
         image = images[image_index]
         # check if this user has already seen this image
@@ -67,7 +72,8 @@ def get_image(user_id):
             "image_latitude": image.image_latitude,
             "image_time": image.image_time,
             "image_parent": image.image_parent,
-            "image_num": image.image_num
+            "image_num": image.image_num,
+            "num_labels": len(labels_done)
         }
         return img_dict
     else:
