@@ -45,6 +45,10 @@ def new_image():
     categories = current_app.config["CATEGORIES"]
     label_form = LabelForm()
     label_form.cat_radio.choices = [(cat,cat) for cat in categories]
+
+    if not "num_images_seen" in session.keys():
+        session["num_images_seen"] = 0
+
     if request.method=="POST":
         if not "image_id" in session.keys():
             print("No session ID - how did this happen?", file=sys.stderr)
@@ -53,12 +57,18 @@ def new_image():
             label = label_form.cat_radio.data
             notes = label_form.notes.data
             save_label(user_id, image_id, label, notes)
+
+        session["num_images_seen"] += 1
     # get the next image
     image_dict = get_image(user_id)
 
 
     if not image_dict:
-        return render_template("no_images.html")
+        if "num_images_seen" in session.keys() and \
+           session["num_images_seen"] > 0:
+            return render_template("no_more_images.html")
+        else:
+            return render_template("no_images.html")
     # store the image id in the session
     session["image_id"] = image_dict["image_id"]
     # now reset the form to re-render the page
@@ -75,4 +85,6 @@ def new_image():
                            img_long=image_dict["image_longitude"],
                            img_lat=image_dict["image_latitude"],
                            img_date=image_dict["image_time"],
+                           n_seen_session = session["num_images_seen"],
+                           n_seen_total=image_dict["num_labels"],
                            form=new_label_form)
